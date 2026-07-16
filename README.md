@@ -13,21 +13,30 @@
         .header { text-align: center; border-bottom: 2px solid #f0f2f5; padding-bottom: 8px; flex-shrink: 0; }
         .header h1 { font-size: 18px; font-weight: 700; }
 
-        /* Ringkasan 3 Baris */
+        /* Ringkasan Catatan 2 Baris */
         .notes-card { background-color: #fff8eb; border-left: 4px solid #ffb020; padding: 10px; border-radius: 6px; flex-shrink: 0; }
-        .notes-card li { font-size: 11px; color: #4a4a4a; line-height: 1.3; margin-bottom: 4px; list-style: none; }
-        .red { color: #ef4444; font-weight: 700; }
+        .notes-card li { font-size: 11px; color: #4a4a4a; line-height: 1.4; margin-bottom: 4px; list-style: none; }
+        .notes-card li:last-child { margin-bottom: 0; }
 
         .iframe-container { flex-grow: 1; border-radius: 8px; overflow: hidden; border: 1px solid #e0e0e0; background: #fafafa; }
         iframe { width: 100%; height: 100%; border: none; }
 
         .action-buttons { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
-        .btn-group { display: flex; gap: 8px; }
-        .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
-        .btn-refresh { background-color: #0066cc; color: white; }
-        .btn-order { background-color: #22c55e; color: white; }
-        .btn:disabled { background-color: #cbd5e1; }
-        .cooldown-text { text-align: center; font-size: 10px; color: #ef4444; font-weight: 600; }
+        
+        /* Tombol Refresh Lebar */
+        .btn-refresh { 
+            width: 100%; 
+            padding: 14px; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 14px; 
+            font-weight: 600; 
+            cursor: pointer;
+            background-color: #0066cc; 
+            color: white;
+            transition: background-color 0.2s ease;
+        }
+        .btn-refresh:hover { background-color: #0052a3; }
     </style>
 </head>
 <body>
@@ -37,8 +46,8 @@
 
     <div class="notes-card">
         <ul>
-            <li>📝 <b>Stok Update Otomatis:</b> Silakan lakukan <b>Refresh Manual</b> untuk data terbaru.</li>
-            <li>🚀 <b>Sistem Detikan:</b> Mendukung transaksi cepat detikan.</li>
+            <li>📝 <b>Stok Real time:</b> Silakan lakukan <b>Refresh Manual</b> untuk data terbaru.</li>
+            <li>🚀 <b>Sistem Detikan:</b> Mendukung transaksi cepat tanpa kendala.</li>
             <li>⚠️ <b>Aturan 30 Detik:</b> Order hanya bisa 1x tiap 30 detik. <span class="red">Jika gagal/unreg, tunggu cooldown selesai lalu coba lagi!</span></li>
         </ul>
     </div>
@@ -48,29 +57,11 @@
     </div>
 
     <div class="action-buttons">
-        <div class="btn-group">
-            <button class="btn btn-refresh" onclick="document.getElementById('stockFrame').src=document.getElementById('stockFrame').src">🔄 Refresh</button>
-            <button class="btn btn-order" id="orderBtn" onclick="startOrderCooldown()">🚀 Order (30s)</button>
-        </div>
-        <div class="cooldown-text" id="cooldownText" style="display: none;">Harap tunggu <span id="timer">30</span> detik sebelum klik order ulang.</div>
+        <button class="btn-refresh" onclick="document.getElementById('stockFrame').src=document.getElementById('stockFrame').src">
+            🔄 Refresh Data Stok
+        </button>
     </div>
 </div>
-
-<script>
-    function startOrderCooldown() {
-        const btn = document.getElementById('orderBtn');
-        const text = document.getElementById('cooldownText');
-        let t = 30;
-        btn.disabled = true;
-        text.style.display = 'block';
-        window.open('https://alternatifv2mrfmedia.vercel.app/', '_blank');
-        const c = setInterval(() => {
-            t--;
-            document.getElementById('timer').textContent = t;
-            if (t <= 0) { clearInterval(c); btn.disabled = false; text.style.display = 'none'; }
-        }, 1000);
-    }
-</script>
 
 </body>
 </html>
