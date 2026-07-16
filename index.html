@@ -8,22 +8,43 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: #f4f6f9; display: flex; justify-content: center; align-items: center; height: 100vh; width: 100vw; overflow: hidden; padding: 10px; }
-        .container { background: #ffffff; max-width: 600px; width: 100%; height: 98vh; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        
+        .container { 
+            background: #ffffff; 
+            max-width: 600px; 
+            width: 100%; 
+            height: 98vh; 
+            border-radius: 16px; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05); 
+            padding: 15px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            position: relative;
+        }
         
         .header { text-align: center; border-bottom: 2px solid #f0f2f5; padding-bottom: 8px; flex-shrink: 0; }
         .header h1 { font-size: 18px; font-weight: 700; }
 
-        /* Ringkasan Catatan 2 Baris */
         .notes-card { background-color: #fff8eb; border-left: 4px solid #ffb020; padding: 10px; border-radius: 6px; flex-shrink: 0; }
         .notes-card li { font-size: 11px; color: #4a4a4a; line-height: 1.4; margin-bottom: 4px; list-style: none; }
         .notes-card li:last-child { margin-bottom: 0; }
+        
+        /* Memperbaiki warna teks merah yang sempat hilang di CSS sebelumnya */
+        .red { color: #ef4444; font-weight: 700; }
 
-        .iframe-container { flex-grow: 1; border-radius: 8px; overflow: hidden; border: 1px solid #e0e0e0; background: #fafafa; }
+        .iframe-container { flex-grow: 1; border-radius: 8px; overflow: hidden; border: 1px solid #e0e0e0; background: #fafafa; position: relative; z-index: 1; }
         iframe { width: 100%; height: 100%; border: none; }
 
-        .action-buttons { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+        .action-buttons { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+            flex-shrink: 0;
+            position: relative;
+            z-index: 10; /* Memaksa tombol berada di atas lapisan iframe agar responsif saat disentuh di HP */
+        }
         
-        /* Tombol Refresh Lebar */
         .btn-refresh { 
             width: 100%; 
             padding: 14px; 
@@ -35,8 +56,10 @@
             background-color: #0066cc; 
             color: white;
             transition: background-color 0.2s ease;
+            -webkit-tap-highlight-color: transparent; /* Menghilangkan efek kedip abu-abu di HP browser */
         }
         .btn-refresh:hover { background-color: #0052a3; }
+        .btn-refresh:active { background-color: #004080; } /* Efek ketika ditekan layar HP */
     </style>
 </head>
 <body>
@@ -47,21 +70,33 @@
     <div class="notes-card">
         <ul>
             <li>📝 <b>Stok Real time:</b> Silakan lakukan <b>Refresh Manual</b> untuk data terbaru.</li>
-            <li>🚀 <b>Sistem Detikan:</b> Mendukung transaksi cepat tanpa kendala.</li>
+            <li>🚀 <b>Sistem Detikan:</b> Mendukung transaksi cepat detikan beda dengan V.</li>
             <li>⚠️ <b>Aturan 30 Detik:</b> Order hanya bisa 1x tiap 30 detik. <span class="red">Jika gagal/unreg, tunggu cooldown selesai lalu coba lagi!</span></li>
         </ul>
     </div>
 
     <div class="iframe-container">
+        <!-- Ditambahkan id agar fungsi javascript mendeteksi dengan akurat -->
         <iframe id="stockFrame" src="https://alternatifv2mrfmedia.vercel.app/"></iframe>
     </div>
 
     <div class="action-buttons">
-        <button class="btn-refresh" onclick="document.getElementById('stockFrame').src=document.getElementById('stockFrame').src">
+        <!-- Menggunakan fungsi javascript khusus agar eksekusi refresh lebih stabil di mobile -->
+        <button class="btn-refresh" onclick="jalankanRefresh()">
             🔄 Refresh Data Stok
         </button>
     </div>
 </div>
+
+<script>
+    function jalankanRefresh() {
+        var iframe = document.getElementById('stockFrame');
+        if (iframe) {
+            // Trik terbaik me-refresh iframe di browser mobile Android/iOS
+            iframe.src = iframe.src;
+        }
+    }
+</script>
 
 </body>
 </html>
